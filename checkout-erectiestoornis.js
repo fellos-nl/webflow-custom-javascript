@@ -78,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "elke-3-maanden": { sellingPlanId: "690456789296", priceModifier: 1.0 },
   };
 
-  // List of keys to clear from localStorage
+  // List of keys to clear from sessionStorage
   const keysToClear = ["levering", "aantal", "sterkte", "variant"];
 
   // Loop through each key and remove it
   keysToClear.forEach((key) => {
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
   });
 
   // Auto-click on element with ID "Sildenafil"
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getUserSelection(category, defaultValue) {
-    return localStorage.getItem(category) || defaultValue;
+    return sessionStorage.getItem(category) || defaultValue;
   }
 
   // Form submission handling generalized for all categories
@@ -228,8 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(`${category}Input`).value =
       mapSelectionToInputValue(category, selectedOption);
 
-    // Store the selection in localStorage
-    localStorage.setItem(category, selectedOption);
+    // Store the selection in sessionStorage
+    sessionStorage.setItem(category, selectedOption);
   }
 
   function mapSelectionToInputValue(category, selection) {
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize display with stored selections
   ["variant", "sterkte", "aantal", "levering"].forEach((category) => {
-    const storedValue = localStorage.getItem(category);
+    const storedValue = sessionStorage.getItem(category);
     if (storedValue) {
       updateDisplayAndStoreSelection(category, storedValue);
     }
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Loop through each category and reset its options and UI based on the selected geneesmiddel
     ["variant", "sterkte", "aantal", "levering"].forEach((category) => {
       // Reset the stored value to the default for this category
-      localStorage.setItem(category, selectedDefaults[category]);
+      sessionStorage.setItem(category, selectedDefaults[category]);
 
       // Update the UI to reflect the default option for the selected geneesmiddel
       updateDisplayAndStoreSelection(category, selectedDefaults[category]);
