@@ -82,6 +82,12 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     // Email validation
+    const birthdayInput = section.querySelector("#Geboortedatum");
+    if (birthdayInput && !validateBirthday(birthdayInput.value)) {
+      areFieldsValid = false; // Invalidate if birthday is not valid
+    }
+
+    // Email validation
     const emailInput = section.querySelector("#Email");
     if (emailInput && !validateEmail(emailInput.value)) {
       areFieldsValid = false; // Invalidate if email is not valid
@@ -315,6 +321,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailInput = document.getElementById("Email");
   const passwordInput = document.getElementById("Password");
   const confirmPasswordInput = document.getElementById("Password-confirm");
+  const birthdayInput = document.getElementById('Geboortedatum');
+  const birthdayErrorMessage = document.getElementById('geboortedatum-error-message');
+
+  function validateBirthdayInput() {
+    // Validate birthday and toggle error display
+    const isValid = validateBirthday(birthdayInput.value);
+    toggleErrorDisplay(birthdayInput, isValid, birthdayErrorMessage);
+  }
 
   function validateEmailInput() {
     // Email validation
@@ -344,6 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
+  birthdayInput.addEventListener('blur', validateBirthdayInput);
   emailInput.addEventListener("blur", validateEmailInput);
   passwordInput.addEventListener("blur", validatePasswordInput);
   confirmPasswordInput.addEventListener("blur", validateConfirmPasswordInput);
@@ -352,6 +367,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const re =
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+  }
+
+  function validateBirthday(birthday) {
+    // Function to validate the birthday format dd-mm-yyyy
+    const re = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-\d{4}$/;
+    return re.test(birthday);
   }
 
   function validatePassword(password) {
