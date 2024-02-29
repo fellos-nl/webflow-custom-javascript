@@ -115,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Check if ALL required form fields are checked
   function areAllRequiredFieldsValid() {
     const sections = document.querySelectorAll(".form-section");
-    let firstInvalidField = null;
 
     for (let section of sections) {
       const requiredFields = section.querySelectorAll(
@@ -123,30 +122,26 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       for (let field of requiredFields) {
         if (!field.checkValidity()) {
-          displayErrorMessage(field, "Dit is een vereist veld.");
-          if (!firstInvalidField) firstInvalidField = field;
+          return false;
         }
       }
 
       // Birthday validation
       const birthdayInput = section.querySelector("#Geboortedatum");
       if (birthdayInput && !validateBirthday(birthdayInput.value)) {
-        displayErrorMessage(birthdayInput, "Geen geldig format voor geboortedatum (dd-mm-jjjj).");
-        if (!firstInvalidField) firstInvalidField = field;
+        return false;
       }
 
       // Email validation
       const emailInput = section.querySelector("#Email");
       if (emailInput && !validateEmail(emailInput.value)) {
-        displayErrorMessage(emailInput, "Geen geldig emailadres.");
-        if (!firstInvalidField) firstInvalidField = field;
+        return false;
       }
 
       // Password validation
       const passwordInput = section.querySelector("#Password");
       if (passwordInput && !validatePassword(passwordInput.value)) {
-        displayErrorMessage(passwordInput, "Je wachtwoord moet minstens één hoofdletter, één kleine letter, één cijfer en één speciaal teken (zoals @$!%*?&) bevatten en minimaal 8 en maximaal 15 tekens lang zijn.");
-        if (!firstInvalidField) firstInvalidField = field;
+        return false;
       }
 
       // Confirm Password validation
@@ -156,25 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmPasswordInput &&
         passwordInput.value !== confirmPasswordInput.value
       ) {
-        displayErrorMessage(confirmPasswordInput, "De wachtwoorden komen niet overeen.");
-        if (!firstInvalidField) firstInvalidField = field;
+        return false;
       }
-    }
-
-    if (firstInvalidField) {
-      firstInvalidField.focus();
-      return false;
     }
     
     return true; // All required fields are valid, including email and password, and passwords match
-  }
-
-  function displayErrorMessage(field, message) {
-    // Implementation depends on your error message display logic
-    const errorElement = field.nextElementSibling; // Assuming error message element immediately follows the input
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-    field.classList.add('error');
   }
 
   function updateNavigationState(index) {
