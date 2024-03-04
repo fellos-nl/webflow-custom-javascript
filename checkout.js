@@ -5,6 +5,8 @@ document.body.addEventListener("click", async (event) => {
       const storedProducts = JSON.parse(
         localStorage.getItem(window.LOCAL_STORAGE_KEY) || "[]"
       );
+
+      
   
       const lineItems = storedProducts.map((product) => {
         return {
@@ -17,7 +19,7 @@ document.body.addEventListener("click", async (event) => {
       // Convert to the GraphQL format
       const formattedLineItems = lineItems
         .map(
-          (item) => `{merchandiseId: "${item.variantId}", quantity: ${item.quantity}, sellingPlanId: "${item.sellingPlanId}"}`
+          (item) => item.sellingPlanId ? `{merchandiseId: "${item.variantId}", quantity: ${item.quantity}, sellingPlanId: "${item.sellingPlanId}"}` : `{merchandiseId: "${item.variantId}", quantity: ${item.quantity}}`
         )
         .join(", ");
   
