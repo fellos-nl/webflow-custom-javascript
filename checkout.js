@@ -30,7 +30,7 @@ document.body.addEventListener("click", async (event) => {
       await Wized.requests.execute("create_shopify_otc_checkout");
   
       // Get the checkout URL
-      const checkoutURL = Wized.data.r.create_shopify_otc_checkout.data.cart.checkoutUrl;
+      const checkoutURL = Wized.data.r.create_shopify_otc_checkout.data.data.cartCreate.cart.checkoutUrl;
   
       // Redirect the user to the checkout URL
       if (checkoutURL) {
