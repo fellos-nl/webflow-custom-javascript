@@ -22,7 +22,7 @@
             successText.style.display = "flex";
         } else {
             const amountRemaining = (100 - subtotal).toFixed(2);
-            remainingAmount.textContent = `£${amountRemaining}`;
+            remainingAmount.textContent = `€${amountRemaining}`;
             defaultText.style.display = "flex";
             successText.style.display = "none";
         }
@@ -111,7 +111,7 @@
         );
         return products
             .reduce((total, product) => {
-            const priceValue = parseFloat(product.price.replace("€", ""));
+            const priceValue = parseFloat(product.price);
             return total + priceValue * product.quantity;
             }, 0)
             .toFixed(2);
