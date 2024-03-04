@@ -102,7 +102,6 @@
         const products = JSON.parse(
             localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
         );
-        console.log("products: ", products);
         return products.reduce((total, product) => total + product.quantity, 0);
         };
 
