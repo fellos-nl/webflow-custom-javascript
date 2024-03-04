@@ -9,27 +9,26 @@ document.body.addEventListener("click", async (event) => {
       const lineItems = storedProducts.map((product) => {
         return {
           variantId: product.productVariantId,
-          quantity: product.quantity
+          quantity: product.quantity,
+          sellingPlanId: product.sellingPlanId
         };
       });
   
       // Convert to the GraphQL format
       const formattedLineItems = lineItems
         .map(
-          (item) => `{variantId: "${item.variantId}", quantity: ${item.quantity}}`
+          (item) => `{merchandiseId: "${item.variantId}", quantity: ${item.quantity}, sellingPlanId: "${item.sellingPlanId}"}`
         )
         .join(", ");
   
       // Set the Wized variable
-      await Wized.data.setVariable("checkoutItems", `[${formattedLineItems}]`);
+      Wized.data.v.checkoutItems = `[${formattedLineItems}]`;
   
       // Execute the Wized request
-      await Wized.request.execute("Create Checkout");
+      await Wized.requests.execute("create_shopify_otc_checkout");
   
       // Get the checkout URL
-      const checkoutURL = await Wized.data.get(
-        "r.7.d.data.data.checkoutCreate.checkout.webUrl"
-      );
+      const checkoutURL = Wized.data.r.create_shopify_otc_checkout.data.cart.checkoutUrl;
   
       // Redirect the user to the checkout URL
       if (checkoutURL) {
