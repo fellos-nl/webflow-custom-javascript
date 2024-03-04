@@ -196,7 +196,7 @@
             localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
         );
         const cartIds = storedProducts.map((product) => product.id);
-        Wized.data.cartIds = JSON.stringify(cartIds);
+        Wized.data.v.cartIds = JSON.stringify(cartIds);
         };
 
         document.addEventListener("DOMContentLoaded", async () => {
