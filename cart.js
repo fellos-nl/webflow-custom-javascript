@@ -126,7 +126,11 @@
             '[wized="subtotal_price"]'
         );
         totalQuantityElem.textContent = calculateTotalQuantity();
-        subtotalPriceElem.textContent = `€${calculateSubtotalPrice()}`;
+
+        const price = calculateSubtotalPrice();
+        const roundedPrice = Math.ceil(price *100)/100;
+        const formattedPrice = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(roundedPrice);
+        subtotalPriceElem.textContent = formattedPrice;
         };
 
         const MAX_RETRIES = 10;
@@ -219,7 +223,7 @@
         }, 1000);
         const subtotalElement = document.querySelector('[wized="subtotal_price"]');
         if (storedProducts.length === 0 && subtotalElement) {
-            subtotalElement.textContent = "€0.00";
+            subtotalElement.textContent = "€0,00";
         }
         updateShippingBar();
         });
