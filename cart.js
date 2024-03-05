@@ -33,7 +33,6 @@
   
       // Function to update the cart empty status
       const updateCartEmptyStatus = async () => {
-        console.log("updating cart empty status");
         const storedProducts = JSON.parse(
           localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
         );
@@ -163,7 +162,6 @@
       };
   
       const updateCartAndPollItems = async () => {
-        console.log("updating cart and polling items");
         const storedProducts = JSON.parse(
           localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
         );
@@ -211,9 +209,9 @@
         }));
         Wized.data.v.cartIds = JSON.stringify(cartIds);
       };
+
   
       document.addEventListener("DOMContentLoaded", async () => {
-        console.log("DOM loaded");
         const timestamp = localStorage.getItem(TIMESTAMP_KEY);
         const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
         if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
