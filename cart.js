@@ -27,6 +27,67 @@
         }
       };
   
+      const initialize = async () => {
+        const timestamp = localStorage.getItem(TIMESTAMP_KEY);
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+        if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          localStorage.removeItem(TIMESTAMP_KEY);
+        }
+        await updateCartAndPollItems();
+        const storedProducts = JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
+        );
+        setTimeout(() => {
+          storedProducts.forEach((product) => {
+            updateQuantityInputForProduct(product.id);
+          });
+          updateDisplayedTotals();
+        }, 1000);
+        const subtotalElement = document.querySelector(
+          '[wized="subtotal_price"]',
+        );
+        if (storedProducts.length === 0 && subtotalElement) {
+          subtotalElement.textContent = "€0,00";
+        }
+        updateShippingBar();
+      };
+  
+      if (document.readyState === "complete") {
+        initialize();
+      } else {
+        window.onload = initialize;
+      }
+  
+      /*
+      // Add event listener to the DOMContentLoaded event
+      document.addEventListener("DOMContentLoaded", async () => {
+        const timestamp = localStorage.getItem(TIMESTAMP_KEY);
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+        if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          localStorage.removeItem(TIMESTAMP_KEY);
+        }
+        await updateCartAndPollItems();
+        const storedProducts = JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
+        );
+        setTimeout(() => {
+          storedProducts.forEach((product) => {
+            updateQuantityInputForProduct(product.id);
+          });
+          updateDisplayedTotals();
+        }, 1000);
+        const subtotalElement = document.querySelector(
+          '[wized="subtotal_price"]',
+        );
+        if (storedProducts.length === 0 && subtotalElement) {
+          subtotalElement.textContent = "€0,00";
+        }
+        updateShippingBar();
+      });
+      */
+  
       // Define local storage key for products in cart
       window.LOCAL_STORAGE_KEY = "fellos_products_in_cart";
       const TIMESTAMP_KEY = "fellos_cart_timestamp";
@@ -209,33 +270,6 @@
         }));
         Wized.data.v.cartIds = JSON.stringify(cartIds);
       };
-
-  
-      document.addEventListener("DOMContentLoaded", async () => {
-        const timestamp = localStorage.getItem(TIMESTAMP_KEY);
-        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-        if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
-          localStorage.removeItem(TIMESTAMP_KEY);
-        }
-        await updateCartAndPollItems();
-        const storedProducts = JSON.parse(
-          localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
-        );
-        setTimeout(() => {
-          storedProducts.forEach((product) => {
-            updateQuantityInputForProduct(product.id);
-          });
-          updateDisplayedTotals();
-        }, 1000);
-        const subtotalElement = document.querySelector(
-          '[wized="subtotal_price"]',
-        );
-        if (storedProducts.length === 0 && subtotalElement) {
-          subtotalElement.textContent = "€0,00";
-        }
-        updateShippingBar();
-      });
   
       document.body.addEventListener("click", async (event) => {
         const targetElement = event.target;
