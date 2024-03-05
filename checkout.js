@@ -6,8 +6,6 @@ document.body.addEventListener("click", async (event) => {
         localStorage.getItem(window.LOCAL_STORAGE_KEY) || "[]"
       );
 
-      
-  
       const lineItems = storedProducts.map((product) => {
         return {
           variantId: product.productVariantId,

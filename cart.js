@@ -43,19 +43,19 @@
     
         // Function to store product details in local storage
         const storeProductInLocalStorage = (productDetails) => {
-        const products = JSON.parse(
-            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
-        );
-        const existingProduct = products.find(
-            (product) => product.id === productDetails.id
-        );
-        if (existingProduct) {
-            existingProduct.quantity = productDetails.quantity;
-        } else {
-            products.push(productDetails);
-        }
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
-        localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
+            const products = JSON.parse(
+                localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+            );
+            const existingProduct = products.find(
+                (product) => product.id === productDetails.id
+            );
+            if (existingProduct) {
+                existingProduct.quantity = productDetails.quantity;
+            } else {
+                products.push(productDetails);
+            }
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+            localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
         };
 
         // Function to remove product from local storage
@@ -196,11 +196,11 @@
         });
 
         const updateCartIds = async () => {
-        const storedProducts = JSON.parse(
-            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
-        );
-        const cartIds = storedProducts.map((product) => product.id);
-        Wized.data.v.cartIds = JSON.stringify(cartIds);
+            const storedProducts = JSON.parse(
+                localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+            );
+            const cartIds = storedProducts.map((product) => ({id: product.id, sellingPlanId: product.sellingPlanId || null}));
+            Wized.data.v.cartIds = JSON.stringify(cartIds);
         };
 
         document.addEventListener("DOMContentLoaded", async () => {
