@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var addArticleBtn = document.querySelector(".prescription-add-row");
+  let selectCounter = 0; // Initialize a counter to keep track of the selects
 
   addArticleBtn.addEventListener("click", function () {
     var container = document.querySelector(".prescription-select-container");
@@ -7,6 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var newSelect = originalSelect.cloneNode(true);
     newSelect.value = "";
 
+    // Update ID and Name to ensure uniqueness
+    selectCounter++; // Increment the counter for each new select
+    newSelect.id = `Geneesmiddel-${selectCounter}`; // Assign a unique ID
+    newSelect.setAttribute("name", `Geneesmiddel-${selectCounter}`); // Optionally set a unique name if needed
+    
     // Create a div to hold the select and the remove button
     var selectDiv = document.createElement("div");
     selectDiv.className = "prescription-add-container";
