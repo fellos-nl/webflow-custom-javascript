@@ -53,10 +53,22 @@
       updateShippingBar();
     };
 
+    function checkForElementAndInitialize() {
+      // Query for the element you're interested in
+      const element = document.querySelector('.cart');
+    
+      // If the element exists, then initialize
+      if (element) {
+        initialize();
+      }
+    }
+
+    // Check if the DOM is already fully loaded
     if (document.readyState === "complete") {
-      initialize();
+      checkForElementAndInitialize();
     } else {
-      window.onload = initialize;
+      // If not, wait for the window to load before initializing
+      window.onload = checkForElementAndInitialize;
     }
 
     /*
