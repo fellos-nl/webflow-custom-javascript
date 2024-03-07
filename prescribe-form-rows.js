@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var container = document.querySelector(".prescription-select-container");
     var originalSelect = document.querySelector(".prescription-article-select");
     var newSelect = originalSelect.cloneNode(true);
-    newSelect.value = "";
+    // Reset the select to have the first option selected
+    newSelect.selectedIndex = 0; // This sets the first option as selected
 
     // Update ID and Name to ensure uniqueness
     selectCounter++; // Increment the counter for each new select
