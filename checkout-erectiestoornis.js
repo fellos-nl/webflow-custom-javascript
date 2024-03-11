@@ -2,70 +2,70 @@ document.addEventListener("DOMContentLoaded", () => {
   const variants = {
     // Key format: "Geneesmiddel-Strength-Quantity"
     "Sildenafil-50mg-4-tabletten": {
-      variantId: "47695236923696",
+      variantId: "48000108069205",
       basePrice: 29.99,
     },
     "Sildenafil-50mg-8-tabletten": {
-      variantId: "47695236956464",
+      variantId: "48000108101973",
       basePrice: 54.99,
     },
     "Sildenafil-100mg-4-tabletten": {
-      variantId: "47695236989232",
+      variantId: "48000108134741",
       basePrice: 34.99,
     },
     "Sildenafil-100mg-8-tabletten": {
-      variantId: "47695237022000",
+      variantId: "48000108167509",
       basePrice: 64.99,
     },
 
     "Tadalafil-10mg-4-tabletten": {
-      variantId: "47695262253360",
+      variantId: "48000107872597",
       basePrice: 34.99,
     },
     "Tadalafil-10mg-8-tabletten": {
-      variantId: "47695262286128",
+      variantId: "48000107905365",
       basePrice: 64.99,
     },
     "Tadalafil-20mg-4-tabletten": {
-      variantId: "47695262318896",
+      variantId: "48000107938133",
       basePrice: 34.99,
     },
     "Tadalafil-20mg-8-tabletten": {
-      variantId: "47695262351664",
+      variantId: "48000107970901",
       basePrice: 64.99,
     },
 
     "Viagra®-50mg-4-tabletten": {
-      variantId: "47695296102704",
+      variantId: "48000107577685",
       basePrice: 44.99,
     },
     "Viagra®-50mg-8-tabletten": {
-      variantId: "47695296135472",
+      variantId: "48000107610453",
       basePrice: 84.99,
     },
     "Viagra®-100mg-4-tabletten": {
-      variantId: "47695296201008",
+      variantId: "48000107643221",
       basePrice: 49.99,
     },
     "Viagra®-100mg-8-tabletten": {
-      variantId: "47695296233776",
+      variantId: "48000107675989",
       basePrice: 94.99,
     },
 
     "Cialis®-10mg-4-tabletten": {
-      variantId: "47716640260400",
+      variantId: "48000107184469",
       basePrice: 44.99,
     },
     "Cialis®-10mg-8-tabletten": {
-      variantId: "47716640293168",
+      variantId: "48000107217237",
       basePrice: 84.99,
     },
     "Cialis®-20mg-4-tabletten": {
-      variantId: "47716640325936",
+      variantId: "48000107250005",
       basePrice: 49.99,
     },
     "Cialis®-20mg-8-tabletten": {
-      variantId: "47716640358704",
+      variantId: "48000107282773",
       basePrice: 94.99,
     },
     // Add all other combinations
@@ -73,9 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const sellingPlans = {
     eenmalig: { sellingPlanId: "eenmalig", priceModifier: 1.0 },
-    "elke-maand": { sellingPlanId: "690456723760", priceModifier: 1.0 },
-    "elke-2-maanden": { sellingPlanId: "690456756528", priceModifier: 1.0 },
-    "elke-3-maanden": { sellingPlanId: "690456789296", priceModifier: 1.0 },
+    "elke-maand": { sellingPlanId: "689821548885", priceModifier: 1.0 },
+    "elke-2-maanden": { sellingPlanId: "689821581653", priceModifier: 1.0 },
+    "elke-3-maanden": { sellingPlanId: "689821614421", priceModifier: 1.0 },
   };
 
   // List of keys to clear from sessionStorage
