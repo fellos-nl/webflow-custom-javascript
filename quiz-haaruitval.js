@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.querySelector(".button-submit");
     const submitSection = document.querySelector(".form-section.submit");
     const isValid = areRequiredFieldsFilled(section); // check required fields in current section
-    const isAllValid = areAllRequiredFieldsValid(); // Check all required fields in the form
 
     if (nextButton) {
       nextButton.classList.toggle("is-disabled", !isValid);
@@ -113,10 +112,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (submitButton && section === submitSection) {
-      submitButton.classList.toggle("is-disabled", !isAllValid);
       document
         .getElementById("disqualify-checkbox")
         .removeAttribute("required");
+
+      document
+        .querySelectorAll("[ignore-required-on-submit]")
+        .forEach((group) => {
+          const radios = group.querySelectorAll('input[type="radio"]');
+          radios.forEach((radio) => {
+            radio.removeAttribute("required");
+          });
+        });
+
+      const isAllValid = areAllRequiredFieldsValid(); // Check all required fields in the form
+      submitButton.classList.toggle("is-disabled", !isAllValid);
     }
   }
 
