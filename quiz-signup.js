@@ -390,23 +390,31 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateBirthday(birthday) {
-    // Extract day, month, year from the birthday
-    const day = parseInt(match[1], 10);
-    const month = parseInt(match[2], 10) - 1; // JavaScript months are 0-based
-    const year = parseInt(match[3], 10);
-
-    const birthDate = new Date(year, month, day);
-    const currentDate = new Date();
-    let age = currentDate.getFullYear() - birthDate.getFullYear();
-    const m = currentDate.getMonth() - birthDate.getMonth();
-
-    // Calculate exact age
-    if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
-      age--;
+    // Function to validate the birthday format dd-mm-yyyy and check if user is at least 18 years old
+    const re = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/;
+    const match = birthday.match(re);
+  
+    if (match) {
+      // Extract day, month, year from the birthday
+      const day = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10) - 1; // JavaScript months are 0-based
+      const year = parseInt(match[3], 10);
+  
+      const birthDate = new Date(year, month, day);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const m = currentDate.getMonth() - birthDate.getMonth();
+  
+      // Calculate exact age
+      if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
+        age--;
+      }
+  
+      // Check if age is at least 18
+      return age >= 18;
+    } else {
+      return false; // Invalid format
     }
-
-    // Check if age is at least 18
-    return age >= 18;
   }
   
 
