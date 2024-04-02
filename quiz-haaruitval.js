@@ -113,10 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (submitButton && section === submitSection) {
       document
-        .getElementById("disqualify-checkbox")
-        .removeAttribute("required");
-
-      document
         .querySelectorAll("[ignore-required-on-submit]")
         .forEach((group) => {
           const radios = group.querySelectorAll('input[type="radio"]');
