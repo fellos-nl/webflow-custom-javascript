@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".form-section");
     for (let section of sections) {
       const requiredFields = section.querySelectorAll(
-        "[required]:not(#disqualify-checkbox):not(#question_18)",
+        "[required]:not(#disqualify-checkbox):not(#question_18):not(#question_36)",
       );
       for (let field of requiredFields) {
         if (!field.checkValidity()) {
@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("disqualify-checkbox")
         .removeAttribute("required");
       document.getElementById("question_18").removeAttribute("required");
+      document.getElementById("question_36").removeAttribute("required");
     }
   }
   function attachInputListeners(section, index) {
