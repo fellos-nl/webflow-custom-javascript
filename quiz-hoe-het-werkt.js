@@ -79,22 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return Array.from(requiredFields).every((field) => field.checkValidity());
   }
 
-  // Check if ALL required form fields are checked
-  function areAllRequiredFieldsValid() {
-    const sections = document.querySelectorAll(".form-section");
-    for (let section of sections) {
-      const requiredFields = section.querySelectorAll(
-        "[required]:not(#disqualify-checkbox)",
-      );
-      for (let field of requiredFields) {
-        if (!field.checkValidity()) {
-          return false; // Immediately return false if any field is not valid
-        }
-      }
-    }
-    return true; // Return true only if all required fields in all sections are valid
-  }
-
   function updateNavigationState(index) {
     const section = formSections[index];
     const nextButton = section.querySelector(".next-button");
@@ -102,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.querySelector(".button-submit");
     const submitSection = document.querySelector(".form-section.submit");
     const isValid = areRequiredFieldsFilled(section); // check required fields in current section
-    const isAllValid = areAllRequiredFieldsValid(); // Check all required fields in the form
 
     if (nextButton) {
       nextButton.classList.toggle("is-disabled", !isValid);
@@ -113,10 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (submitButton && section === submitSection) {
-      submitButton.classList.toggle("is-disabled", !isAllValid);
-      document
-        .getElementById("disqualify-checkbox")
-        .removeAttribute("required");
+      submitButton.classList.toggle("is-disabled", !isValid);
     }
   }
 
