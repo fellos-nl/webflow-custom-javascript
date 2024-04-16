@@ -14,7 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function showSection(index, isForwardNavigation = true) {
     const sections = document.querySelectorAll(".form-section");
     sections.forEach((section, idx) => {
-      section.style.display = idx === index ? "flex" : "none";
+      let isSectionVisible = idx === index;
+      section.style.display = isSectionVisible ? "flex" : "none";
+
+      // Ensure inputs in non-visible sections are not required
+      section.querySelectorAll("input[required], select[required], textarea[required]").forEach(input => {
+        input.required = isSectionVisible;
+      });
+
     });
 
     // Check if navigating to disqualification section and exclude from history
