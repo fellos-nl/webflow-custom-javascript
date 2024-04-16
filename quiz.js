@@ -16,11 +16,14 @@ document.addEventListener("DOMContentLoaded", function () {
     sections.forEach((section, idx) => {
       let isSectionVisible = idx === index;
       section.style.display = isSectionVisible ? "flex" : "none";
-      // Ensure inputs in non-visible sections are not required
-      section.querySelectorAll("input[required], select[required], textarea[required]").forEach(input => {
-          input.required = isSectionVisible;
-      });
     });
+
+    updateNavigationState(index);
+
+    // Reinstating required attributes if not in submit section
+    if (!sections[index].classList.contains("submit")) {
+      reinstateRequiredAttributes();
+    }
 
     // Check if navigating to disqualification section and exclude from history
     if (
@@ -34,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
       lastSectionIndex = index; // Update lastSectionIndex if not going to disqualification section
     }
 
-    updateNavigationState(index);
     updateProgressBar(); // Ensure the progress bar is updated every time a section is shown
   }
 
@@ -101,9 +103,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (submitButton && section === submitSection) {
+    // Remove 'required' attribute from groups of inputs if their container has the attribute
+    document.querySelectorAll("[ignore-required-on-submit]").forEach(group => {
+      // This checks if the element is a direct input or a group container
+      if (group.tagName.toLowerCase() === 'input') {
+        group.removeAttribute("required");
+      } else {
+        // Assuming this is a container for grouped inputs like radio buttons
+        const inputs = group.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.removeAttribute("required");
+        });
+      }
+    });
+
       submitButton.classList.toggle("is-disabled", !isValid);
     }
   }
+
+  function reinstateRequiredAttributes() {
+    const conditionalFields = document.querySelectorAll("[ignore-required-on-submit]");
+    conditionalFields.forEach(field => {
+      if (field.tagName.toLowerCase() === 'input') {
+        field.setAttribute("required", "");
+      } else {
+        const inputs = field.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.setAttribute("required", "");
+        });
+      }
+    });
+  }  
 
   function attachInputListeners(section, index) {
     const inputs = section.querySelectorAll(
@@ -121,7 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (
           input.type === "radio" &&
           input.checked &&
-          input.dataset.disqualify !== "true"
+          input.dataset.disqualify !== "true" &&
+          input.getAttribute("gotonext") !== "false"
         ) {
           // Call nextSection with a slight delay to ensure a smooth user experience
           setTimeout(() => nextSection(index), 200); // Adjust the delay as needed
