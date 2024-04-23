@@ -137,13 +137,11 @@
     };
 
     const updateDisplayedTotals = () => {
-      const totalQuantityElem = document.querySelector(
-        '[wized="item_quantity_total"]',
-      );
+      //const totalQuantityElem = document.querySelector('[wized="item_quantity_total"]',);
       const subtotalPriceElem = document.querySelector(
         '[wized="subtotal_price"]',
       );
-      totalQuantityElem.textContent = calculateTotalQuantity();
+      //totalQuantityElem.textContent = calculateTotalQuantity();
 
       const price = calculateSubtotalPrice();
       const roundedPrice = Math.ceil(price * 100) / 100;
