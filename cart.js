@@ -15,7 +15,7 @@
       );
       setTimeout(() => {
         storedProducts.forEach((product) => {
-          updateQuantityInputForProduct(product.id);
+          updateQuantityInputForProduct(product.stripe_product_id);
         });
         updateDisplayedTotals();
       }, 1000);
@@ -64,7 +64,7 @@
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
       const existingProduct = products.find(
-        (product) => product.id === productDetails.id,
+        (product) => product.stripe_product_id === productDetails.stripe_product_id,
       );
       if (existingProduct) {
         existingProduct.quantity = productDetails.quantity;
@@ -73,6 +73,7 @@
       }
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
       localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
+      console.log('products stored in localstorage');
     };
 
     // Function to remove product from local storage
@@ -80,7 +81,7 @@
       let products = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
-      products = products.filter((product) => product.id !== productId);
+      products = products.filter((product) => product.stripe_product_id !== productId);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
     };
 
@@ -89,7 +90,7 @@
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
       const productToUpdate = products.find(
-        (product) => product.id === productId,
+        (product) => product.stripe_product_id === productId,
       );
       if (productToUpdate) {
         productToUpdate.quantity = newQuantity;
@@ -101,7 +102,7 @@
       const products = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
-      const product = products.find((product) => product.id === productId);
+      const product = products.find((product) => product.stripe_product_id === productId);
       return product ? product.quantity : 1;
     };
 
@@ -117,13 +118,6 @@
       }
     };
 
-    const calculateTotalQuantity = () => {
-      const products = JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
-      );
-      return products.reduce((total, product) => total + product.quantity, 0);
-    };
-
     const calculateSubtotalPrice = () => {
       const products = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
@@ -137,11 +131,9 @@
     };
 
     const updateDisplayedTotals = () => {
-      //const totalQuantityElem = document.querySelector('[wized="item_quantity_total"]',);
       const subtotalPriceElem = document.querySelector(
         '[wized="subtotal_price"]',
       );
-      //totalQuantityElem.textContent = calculateTotalQuantity();
 
       const price = calculateSubtotalPrice();
       const roundedPrice = Math.ceil(price * 100) / 100;
@@ -158,7 +150,7 @@
     const pollForCartItems = async (storedProducts) => {
       let retryCount = 0;
       const pollInterval = setInterval(() => {
-        const storedProductIds = storedProducts.map((product) => product.id);
+        const storedProductIds = storedProducts.map((product) => product.stripe_product_id);
         const foundAllItems = storedProductIds.every((productId) => {
           const inputElement = document.querySelector(
             `[wized="cart_item"][data-attribute-id="${productId}"] [wized="cart_item_quantity"]`,
@@ -189,21 +181,28 @@
 
     const handleCurrentProductDetailsUpdate = async () => {
       const currentProductDetails = Wized.data.v.currentProductDetails;
+      console.log('currentProductDetails: ', currentProductDetails);
       const storedProducts = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
+      console.log('storedProducts: ', storedProducts);
       const existingProduct = storedProducts.find(
-        (product) => product.id === currentProductDetails.id,
+        (product) => product.stripe_product_id === currentProductDetails.stripe_product_id,
       );
+      console.log('existing product: ', existingProduct);
       // If the product already exists in the cart, we bypass the logic to add it again.
-      if (existingProduct) return;
-      if (currentProductDetails && currentProductDetails.id) {
+      if (existingProduct) {
+        console.log('existing product found, skipping...');
+        return;
+      };
+      if (currentProductDetails && currentProductDetails.stripe_product_id) {
+        console.log('no existing products');
         storeProductInLocalStorage({
           ...currentProductDetails,
           quantity: 1,
         });
         await updateCartAndPollItems();
-        updateQuantityInputForProduct(currentProductDetails.id);
+        updateQuantityInputForProduct(currentProductDetails.stripe_product_id);
         // Update the displayed totals and shipping bar
         updateDisplayedTotals();
       }
@@ -211,7 +210,9 @@
 
     // Listen for updates to the current product details (custom event setup in Wized) and call functions
     document.addEventListener("currentProductDetailsChanged", async () => {
+      console.log('event received');
       await handleCurrentProductDetailsUpdate();
+      console.log('handle completed');
       await updateCartAndPollItems();
     });
 
@@ -220,8 +221,8 @@
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
       const cartIds = storedProducts.map((product) => ({
-        id: product.id,
-        sellingPlanId: product.sellingPlanId || null,
+        stripe_price_id: product.stripe_price_id,
+        stripe_product_id: product.stripe_product_id || null,
       }));
       Wized.data.v.cartIds = JSON.stringify(cartIds);
     };
