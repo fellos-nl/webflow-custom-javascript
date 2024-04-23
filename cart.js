@@ -1,31 +1,6 @@
 (function () {
   window.Wized = window.Wized || [];
   window.Wized.push((Wized) => {
-    // Function to update the shipping bar based on the subtotal
-    const updateShippingBar = () => {
-      const subtotal = parseFloat(calculateSubtotalPrice());
-      const progressPercentage = Math.min((subtotal / 100) * 100, 100);
-      const shippingBarProgress = document.querySelector(
-        ".shipping-progress-bar",
-      );
-      const remainingAmount = document.querySelector(
-        ".free-shipping-text.remaining-amount",
-      );
-      const defaultText = document.querySelector(".shipping-text");
-      const successText = document.querySelector(".shipping-text.hide");
-      // Update the width of the progress bar.
-      shippingBarProgress.style.width = `${progressPercentage}%`;
-      // Update remaining amount and decide which text to display.
-      if (subtotal >= 100) {
-        defaultText.style.display = "none";
-        successText.style.display = "flex";
-      } else {
-        const amountRemaining = (100 - subtotal).toFixed(2);
-        remainingAmount.textContent = `€${amountRemaining}`;
-        defaultText.style.display = "flex";
-        successText.style.display = "none";
-      }
-    };
 
     const initialize = async () => {
       const timestamp = localStorage.getItem(TIMESTAMP_KEY);
@@ -50,7 +25,6 @@
       if (storedProducts.length === 0 && subtotalElement) {
         subtotalElement.textContent = "€ 0,00";
       }
-      updateShippingBar();
     };
 
     function checkForElementAndInitialize() {
@@ -70,35 +44,6 @@
       // If not, wait for the window to load before initializing
       window.onload = checkForElementAndInitialize;
     }
-
-    /*
-    // Add event listener to the DOMContentLoaded event
-    document.addEventListener("DOMContentLoaded", async () => {
-      const timestamp = localStorage.getItem(TIMESTAMP_KEY);
-      const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-      if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-        localStorage.removeItem(TIMESTAMP_KEY);
-      }
-      await updateCartAndPollItems();
-      const storedProducts = JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
-      );
-      setTimeout(() => {
-        storedProducts.forEach((product) => {
-          updateQuantityInputForProduct(product.id);
-        });
-        updateDisplayedTotals();
-      }, 1000);
-      const subtotalElement = document.querySelector(
-        '[wized="subtotal_price"]',
-      );
-      if (storedProducts.length === 0 && subtotalElement) {
-        subtotalElement.textContent = "€0,00";
-      }
-      updateShippingBar();
-    });
-    */
 
     // Define local storage key for products in cart
     window.LOCAL_STORAGE_KEY = "fellos_products_in_cart";
@@ -263,7 +208,6 @@
         updateQuantityInputForProduct(currentProductDetails.id);
         // Update the displayed totals and shipping bar
         updateDisplayedTotals();
-        updateShippingBar();
       }
     };
 
@@ -316,7 +260,6 @@
         JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"),
       );
       updateDisplayedTotals();
-      updateShippingBar();
       await updateCartEmptyStatus();
     });
 
@@ -332,7 +275,6 @@
 
       updateProductQuantityInLocalStorage(productId, newQuantity);
       updateDisplayedTotals();
-      updateShippingBar();
       await updateCartEmptyStatus();
     };
 

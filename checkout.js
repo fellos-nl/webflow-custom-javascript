@@ -24,7 +24,7 @@ document.body.addEventListener("click", async (event) => {
       // Set the Wized variable
       Wized.data.v.checkoutItems = `[${formattedLineItems}]`;
 
-      await Wized.request.execut("get_auth_user");
+      await Wized.request.execute("get_auth_user");
   
       // Execute the Wized request
       await Wized.requests.execute("create_shopify_otc_checkout");
