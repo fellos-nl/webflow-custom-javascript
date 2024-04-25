@@ -99,6 +99,12 @@ document.addEventListener("DOMContentLoaded", function () {
       areFieldsValid = false; // Invalidate if email is not valid
     }
 
+    // Initials validation
+    const initialsInput = section.querySelector("#Voorletters");
+    if (initialsInput && !validateInitials(initialsInput.value)) {
+      areFieldsValid = false; // Invalidate if email is not valid
+    }
+
     // Password validation
     const passwordInput = section.querySelector("#Password");
     const confirmPasswordInput = section.querySelector("#Password-confirm");
@@ -323,6 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const emailInput = document.getElementById("Email");
+  const initialsInput = document.getElementById("Voorletters");
   const passwordInput = document.getElementById("Password");
   const confirmPasswordInput = document.getElementById("Password-confirm");
   const birthdayInput = document.getElementById("Geboortedatum");
@@ -374,6 +381,15 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
+  function validateInitialsInput() {
+    // Email validation
+    toggleErrorDisplay(
+      initialsInput,
+      validateGender(initialsInput),
+      document.getElementById("voorletters-error-message"),
+    );
+  }
+
   function validateGenderInput() {
     // Email validation
     toggleErrorDisplay(
@@ -394,6 +410,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   birthdayInput.addEventListener("blur", validateBirthdayInput);
+  initialsInput.addEventListener("blur", validateInitialsInput);
   emailInput.addEventListener("blur", validateEmailInput);
   genderInput.addEventListener("input", validateGenderInput);
   passwordInput.addEventListener("blur", validatePasswordInput);
@@ -438,6 +455,12 @@ document.addEventListener("DOMContentLoaded", function () {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
     return re.test(password);
   }
+
+  function validateInitials(initials) {
+    const re =
+      /^(?:[A-Za-z]\.?|[A-Za-z](\.[A-Za-z])+\.)$/;
+    return re.test(initials);
+  }  
 
   function validateGender(genderInput) {
     // Check if the gender matches 'man'
