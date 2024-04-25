@@ -73,7 +73,6 @@
       }
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
       localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
-      console.log('products stored in localstorage');
     };
 
     // Function to remove product from local storage
@@ -181,22 +180,17 @@
 
     const handleCurrentProductDetailsUpdate = async () => {
       const currentProductDetails = Wized.data.v.currentProductDetails;
-      console.log('currentProductDetails: ', currentProductDetails);
       const storedProducts = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]",
       );
-      console.log('storedProducts: ', storedProducts);
       const existingProduct = storedProducts.find(
         (product) => product.stripe_product_id === currentProductDetails.stripe_product_id,
       );
-      console.log('existing product: ', existingProduct);
       // If the product already exists in the cart, we bypass the logic to add it again.
       if (existingProduct) {
-        console.log('existing product found, skipping...');
         return;
       };
       if (currentProductDetails && currentProductDetails.stripe_product_id) {
-        console.log('no existing products');
         storeProductInLocalStorage({
           ...currentProductDetails,
           quantity: 1,
@@ -210,9 +204,7 @@
 
     // Listen for updates to the current product details (custom event setup in Wized) and call functions
     document.addEventListener("currentProductDetailsChanged", async () => {
-      console.log('event received');
       await handleCurrentProductDetailsUpdate();
-      console.log('handle completed');
       await updateCartAndPollItems();
     });
 
