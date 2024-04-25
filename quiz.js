@@ -83,7 +83,43 @@ document.addEventListener("DOMContentLoaded", function () {
   // Check if required form fields in current section are checked
   function areRequiredFieldsFilled(section) {
     const requiredFields = section.querySelectorAll("[required]");
-    return Array.from(requiredFields).every((field) => field.checkValidity());
+    let areFieldsValid = Array.from(requiredFields).every((field) => field.checkValidity());
+
+    // Birthday validation
+    const birthdayInput = section.querySelector("#Geboortedatum");
+    if (birthdayInput && !validateBirthday(birthdayInput.value)) {
+      areFieldsValid = false; // Invalidate if birthday is not valid
+    }
+
+    // Email validation
+    const emailInput = section.querySelector("#Email");
+    if (emailInput && !validateEmail(emailInput.value)) {
+      areFieldsValid = false; // Invalidate if email is not valid
+    }
+
+    // Password validation
+    const passwordInput = section.querySelector("#Password");
+    const confirmPasswordInput = section.querySelector("#Password-confirm");
+    if (passwordInput && !validatePassword(passwordInput.value)) {
+      areFieldsValid = false; // Invalidate if password is not valid
+    }
+
+    // Check if passwords match
+    if (
+      passwordInput &&
+      confirmPasswordInput &&
+      passwordInput.value !== confirmPasswordInput.value
+    ) {
+      areFieldsValid = false; // Invalidate if passwords do not match
+    }
+
+    // Gender at birth validation
+    const genderInput = section.querySelector("#Geslacht");
+    if (genderInput && !validateGender(genderInput)) {
+      areFieldsValid = false; // Invalidate if gender at birth is not 'man'
+    }
+
+    return areFieldsValid;
   }
 
   function updateNavigationState(index) {
@@ -141,7 +177,9 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     inputs.forEach((input) => {
       const eventType =
-        input.type === "checkbox" || input.type === "radio"
+        (input.tagName.toLowerCase() === "select" || 
+          input.type === "checkbox" || 
+          input.type === "radio")
           ? "change"
           : "input";
       input.addEventListener(eventType, () => {
@@ -266,4 +304,119 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initial update of the progress bar
   updateProgressBar();
+
+  // Generic function to toggle error display
+  function toggleErrorDisplay(input, isValid, errorMessageElement) {
+    if (!isValid) {
+      errorMessageElement.classList.remove("hide-error-message");
+      input.classList.add("error");
+    } else {
+      errorMessageElement.classList.add("hide-error-message");
+      input.classList.remove("error");
+    }
+  }
+
+  const emailInput = document.getElementById("Email");
+  const passwordInput = document.getElementById("Password");
+  const confirmPasswordInput = document.getElementById("Password-confirm");
+  const birthdayInput = document.getElementById('Geboortedatum');
+  const birthdayErrorMessage = document.getElementById('geboortedatum-error-message');
+
+  function validateBirthdayInput() {
+    const isValidFormat = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/.test(birthdayInput.value);
+    const isOldEnough = validateBirthday(birthdayInput.value);
+  
+    let errorMessage = '';
+    if (!isValidFormat) {
+      errorMessage = 'Ongeldige datum. Gebruik het format dd-mm-yyyy.';
+    } else if (!isOldEnough) {
+      errorMessage = 'Je moet minstens 18 jaar oud zijn om je aan te melden.';
+    }
+  
+    // Display the appropriate error message
+    birthdayErrorMessage.textContent = errorMessage;
+  
+    // Toggle visibility of the error message and input field styling based on validation
+    toggleErrorDisplay(birthdayInput, isValidFormat && isOldEnough, birthdayErrorMessage);
+  }
+
+  function validateEmailInput() {
+    // Email validation
+    toggleErrorDisplay(
+      emailInput,
+      validateEmail(emailInput.value),
+      document.getElementById("email-error-message"),
+    );
+  }
+
+  function validatePasswordInput() {
+    // Password validation
+    toggleErrorDisplay(
+      passwordInput,
+      validatePassword(passwordInput.value),
+      document.getElementById("password-error-message"),
+    );
+  }
+
+  function validateConfirmPasswordInput() {
+    // Password confirmation validation
+    const passwordsMatch = confirmPasswordInput.value === passwordInput.value;
+    toggleErrorDisplay(
+      confirmPasswordInput,
+      passwordsMatch,
+      document.getElementById("password-confirm-error-message"),
+    );
+  }
+
+  birthdayInput.addEventListener('blur', validateBirthdayInput);
+  emailInput.addEventListener("blur", validateEmailInput);
+  passwordInput.addEventListener("blur", validatePasswordInput);
+  confirmPasswordInput.addEventListener("blur", validateConfirmPasswordInput);
+
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  function validateBirthday(birthday) {
+    // Function to validate the birthday format dd-mm-yyyy and check if user is at least 18 years old
+    const re = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/;
+    const match = birthday.match(re);
+  
+    if (match) {
+      // Extract day, month, year from the birthday
+      const day = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10) - 1; // JavaScript months are 0-based
+      const year = parseInt(match[3], 10);
+  
+      const birthDate = new Date(year, month, day);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+      const m = currentDate.getMonth() - birthDate.getMonth();
+  
+      // Calculate exact age
+      if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
+        age--;
+      }
+  
+      // Check if age is at least 18
+      return age >= 18;
+    } else {
+      return false; // Invalid format
+    }
+  }
+  
+  function validatePassword(password) {
+    const re =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    return re.test(password);
+  }
+
+  function validateGender(genderInput) {
+    // Check if the gender matches 'man'
+    return genderInput.value.toLowerCase() === 'man';
+  }
 });
+
+
