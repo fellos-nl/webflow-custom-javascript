@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Email validation
     toggleErrorDisplay(
       initialsInput,
-      validateGender(initialsInput),
+      validateInitials(initialsInput),
       document.getElementById("voorletters-error-message"),
     );
   }
