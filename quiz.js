@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initials validation
     const initialsInput = section.querySelector("#Voorletters");
     if (initialsInput && !validateInitials(initialsInput.value)) {
-      areFieldsValid = false; // Invalidate if email is not valid
+      areFieldsValid = false; // Invalidate if initials is not valid
     }
 
     // Password validation
@@ -382,10 +382,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateInitialsInput() {
-    // Email validation
+    // Initials validation
     toggleErrorDisplay(
       initialsInput,
-      validateInitials(initialsInput),
+      validateInitials(initialsInput.value),
       document.getElementById("voorletters-error-message"),
     );
   }
@@ -457,10 +457,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateInitials(initials) {
-    const re =
-      /^(?:[A-Za-z]\.?|[A-Za-z](\.[A-Za-z])+\.)$/;
+    const re = /^(?:[A-Za-z]\.?|[A-Za-z](\.[A-Za-z])+\.)$/;
     return re.test(initials);
-  }  
+  }
 
   function validateGender(genderInput) {
     // Check if the gender matches 'man'
