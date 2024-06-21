@@ -401,14 +401,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function validateBirthdayInput() {
     const isValidFormat =
-      /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/.test(
+      /^(0[1-9]|[12][0-9]|3[01])[\/-](0[1-9]|1[012])[\/-](\d{4})$/.test(
         birthdayInput.value
       );
     const isOldEnough = validateBirthday(birthdayInput.value);
 
     let errorMessage = "";
     if (!isValidFormat) {
-      errorMessage = "Ongeldige datum. Gebruik het format dd-mm-yyyy.";
+      errorMessage =
+        "Ongeldige datum. Gebruik het format dd-mm-jjjj of dd/mm/jjjj.";
     } else if (!isOldEnough) {
       errorMessage = "Je moet minstens 18 jaar oud zijn om je aan te melden.";
     }
@@ -518,8 +519,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateBirthday(birthday) {
-    // Function to validate the birthday format dd-mm-yyyy and check if user is at least 18 years old
-    const re = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/;
+    // Function to validate the birthday format dd-mm-yyyy or dd/mm/yyyy and check if user is at least 18 years old
+    const re = /^(0[1-9]|[12][0-9]|3[01])[\/-](0[1-9]|1[012])[\/-](\d{4})$/;
     const match = birthday.match(re);
 
     if (match) {
