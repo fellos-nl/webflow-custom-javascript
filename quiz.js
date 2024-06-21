@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateNavigationState(index);
 
+    // Scroll to the top of the page
+    window.scrollTo(0, 0); // This scrolls the window to the top immediately
+
     // Reinstating required attributes if not in submit section
     if (!sections[index].classList.contains("submit")) {
       reinstateRequiredAttributes();
@@ -84,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function areRequiredFieldsFilled(section) {
     const requiredFields = section.querySelectorAll("[required]");
     let areFieldsValid = Array.from(requiredFields).every((field) =>
-      field.checkValidity(),
+      field.checkValidity()
     );
 
     // Birthday validation
@@ -169,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function reinstateRequiredAttributes() {
     const conditionalFields = document.querySelectorAll(
-      "[ignore-required-on-submit]",
+      "[ignore-required-on-submit]"
     );
     conditionalFields.forEach((field) => {
       if (field.tagName.toLowerCase() === "input") {
@@ -185,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function attachInputListeners(section, index) {
     const inputs = section.querySelectorAll(
-      "input[required], select[required], textarea[required], input[data-disqualify]",
+      "input[required], select[required], textarea[required], input[data-disqualify]"
     );
     inputs.forEach((input) => {
       const eventType =
@@ -225,12 +228,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function findDisqualificationSectionIndex() {
     const disqualificationSection = document.querySelector(
-      ".form-section.disqualification",
+      ".form-section.disqualification"
     );
     return disqualificationSection
       ? parseInt(
           disqualificationSection.getAttribute("data-question-index"),
-          10,
+          10
         )
       : -1;
   }
@@ -240,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       const currentIndex = parseInt(
         button.closest(".form-section").getAttribute("data-question-index"),
-        10,
+        10
       );
       if (!button.classList.contains("is-disabled")) {
         nextSection(currentIndex);
@@ -275,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Calculate the percentage of completed form sections
   function calculateProgress() {
     const formSections = document.querySelectorAll(
-      ".form-section:not(.disqualification)",
+      ".form-section:not(.disqualification)"
     );
     const activeSectionIndex = Array.from(formSections).findIndex((section) => {
       return window.getComputedStyle(section).display === "flex";
@@ -335,13 +338,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const birthdayInput = document.getElementById("Geboortedatum");
   const genderInput = document.getElementById("Geslacht");
   const birthdayErrorMessage = document.getElementById(
-    "geboortedatum-error-message",
+    "geboortedatum-error-message"
   );
 
   function validateBirthdayInput() {
     const isValidFormat =
       /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(\d{4})$/.test(
-        birthdayInput.value,
+        birthdayInput.value
       );
     const isOldEnough = validateBirthday(birthdayInput.value);
 
@@ -359,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       birthdayInput,
       isValidFormat && isOldEnough,
-      birthdayErrorMessage,
+      birthdayErrorMessage
     );
   }
 
@@ -368,7 +371,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       emailInput,
       validateEmail(emailInput.value),
-      document.getElementById("email-error-message"),
+      document.getElementById("email-error-message")
     );
   }
 
@@ -377,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       passwordInput,
       validatePassword(passwordInput.value),
-      document.getElementById("password-error-message"),
+      document.getElementById("password-error-message")
     );
   }
 
@@ -386,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       initialsInput,
       validateInitials(initialsInput.value),
-      document.getElementById("voorletters-error-message"),
+      document.getElementById("voorletters-error-message")
     );
   }
 
@@ -395,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       genderInput,
       validateGender(genderInput),
-      document.getElementById("geslacht-error-message"),
+      document.getElementById("geslacht-error-message")
     );
   }
 
@@ -405,7 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleErrorDisplay(
       confirmPasswordInput,
       passwordsMatch,
-      document.getElementById("password-confirm-error-message"),
+      document.getElementById("password-confirm-error-message")
     );
   }
 
