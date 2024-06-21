@@ -245,11 +245,40 @@ document.addEventListener("DOMContentLoaded", function () {
         button.closest(".form-section").getAttribute("data-question-index"),
         10
       );
-      if (!button.classList.contains("is-disabled")) {
+
+      const currentSection =
+        document.querySelectorAll(".form-section")[currentIndex];
+
+      if (!areRequiredFieldsFilled(currentSection)) {
+        showSectionErrors(currentSection); // Show errors in the current section
+      } else if (!button.classList.contains("is-disabled")) {
         nextSection(currentIndex);
       }
     });
   });
+
+  function showSectionErrors(section) {
+    const inputs = section.querySelectorAll(
+      "input[required], select[required], textarea[required]"
+    );
+    inputs.forEach((input) => {
+      if (!input.checkValidity()) {
+        const errorMessageElement = input.nextElementSibling; // Assuming error messages are right after inputs in HTML
+        errorMessageElement.classList.remove("hide-error-message"); // Show error message
+        input.classList.add("error"); // Add error class to highlight
+      }
+    });
+
+    // Optionally scroll to the first error in the section
+    const firstError = section.querySelector(".error");
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    alert(
+      "Vul alle verplichte velden in en corrigeer eventuele fouten voordat je verder gaat."
+    ); // Provide an error message, or make this more specific if desired
+  }
 
   document.querySelectorAll(".prev-button").forEach((button) => {
     button.addEventListener("click", () => {
@@ -271,8 +300,37 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", function (event) {
       if (this.classList.contains("is-disabled")) {
         event.preventDefault();
+        showFormErrors(); // Function to show errors on the form
       }
     });
+
+  function showFormErrors() {
+    // Identify all form sections
+    const sections = document.querySelectorAll(".form-section");
+    sections.forEach((section) => {
+      // Check required fields in each section
+      const inputs = section.querySelectorAll(
+        "input[required], select[required], textarea[required]"
+      );
+      inputs.forEach((input) => {
+        if (!input.checkValidity()) {
+          const errorMessageElement = input.nextElementSibling; // assuming error messages are right after inputs in HTML
+          errorMessageElement.classList.remove("hide-error-message"); // Show error message
+          input.classList.add("error"); // Add error class to highlight
+        }
+      });
+    });
+
+    // Optionally scroll to the first error
+    const firstError = document.querySelector(".error");
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    alert(
+      "Vul alle verplichte velden in en corrigeer eventuele fouten voordat je verder gaat."
+    ); // Provide a generic error message, or make this more specific if desired
+  }
 
   // Progress bar
   // Calculate the percentage of completed form sections
@@ -412,12 +470,46 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
-  birthdayInput.addEventListener("change", validateBirthdayInput);
-  initialsInput.addEventListener("change", validateInitialsInput);
-  emailInput.addEventListener("change", validateEmailInput);
-  genderInput.addEventListener("input", validateGenderInput);
-  passwordInput.addEventListener("change", validatePasswordInput);
-  confirmPasswordInput.addEventListener("change", validateConfirmPasswordInput);
+  // jQuery is used here for handling the datepicker event
+  $(document).ready(function () {
+    $("#Geboortedatum").on("hide.datepicker", function () {
+      validateBirthdayInput(); // Call your validation function
+    });
+  });
+
+  birthdayInput?.addEventListener("input", validateBirthdayInput);
+  initialsInput?.addEventListener("change", validateInitialsInput);
+  emailInput?.addEventListener("change", validateEmailInput);
+  genderInput?.addEventListener("input", validateGenderInput);
+  passwordInput?.addEventListener("change", validatePasswordInput);
+  confirmPasswordInput?.addEventListener(
+    "change",
+    validateConfirmPasswordInput
+  );
+
+  const voornaamInput = document.getElementById("Voornaam");
+  const achternaamInput = document.getElementById("Achternaam");
+
+  function validateFirstNameInput() {
+    const inputFilled = voornaamInput.value.trim() !== "";
+    toggleErrorDisplay(
+      voornaamInput,
+      inputFilled,
+      document.getElementById("voornaam-error-message")
+    );
+  }
+
+  function validateLastNameInput() {
+    const inputFilled = achternaamInput.value.trim() !== "";
+    toggleErrorDisplay(
+      achternaamInput,
+      inputFilled,
+      document.getElementById("achternaam-error-message")
+    );
+  }
+
+  voornaamInput?.addEventListener("change", validateFirstNameInput);
+  achternaamInput?.addEventListener("change", validateLastNameInput);
 
   function validateEmail(email) {
     const re =
