@@ -413,11 +413,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   birthdayInput.addEventListener("change", validateBirthdayInput);
-  initialsInput.addEventListener("blur", validateInitialsInput);
-  emailInput.addEventListener("blur", validateEmailInput);
+  initialsInput.addEventListener("change", validateInitialsInput);
+  emailInput.addEventListener("change", validateEmailInput);
   genderInput.addEventListener("input", validateGenderInput);
-  passwordInput.addEventListener("blur", validatePasswordInput);
-  confirmPasswordInput.addEventListener("blur", validateConfirmPasswordInput);
+  passwordInput.addEventListener("change", validatePasswordInput);
+  confirmPasswordInput.addEventListener("change", validateConfirmPasswordInput);
 
   function validateEmail(email) {
     const re =
