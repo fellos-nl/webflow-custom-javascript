@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
-  birthdayInput.addEventListener("blur", validateBirthdayInput);
+  birthdayInput.addEventListener("change", validateBirthdayInput);
   initialsInput.addEventListener("blur", validateInitialsInput);
   emailInput.addEventListener("blur", validateEmailInput);
   genderInput.addEventListener("input", validateGenderInput);
@@ -460,7 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateInitials(initials) {
-    const re = /^(?:[A-Za-z]\.?|[A-Za-z](\.[A-Za-z])+\.)$/;
+    const re = /^(?:[A-Za-z](?:\.?\s?))*[A-Za-z]\.?$/;
     return re.test(initials);
   }
 
