@@ -4,19 +4,46 @@ document.addEventListener("DOMContentLoaded", function () {
   formSections.forEach((section, index) => {
     section.setAttribute("data-question-index", index);
     attachInputListeners(section, index);
+
+    // Initialize sections
+    section.style.opacity = 0;
+    section.style.transition = "opacity 0.5s ease-in-out";
+    if (index === 0) {
+      section.style.display = "flex";
+      section.style.opacity = 1;
+    } else {
+      section.style.display = "none";
+    }
   });
 
   let lastSectionIndex = 0; // Global variable to keep track of the last section
   let navigationHistory = []; // Initialize this at the beginning of your script
 
-  showSection(0);
+  //showSection(0);
 
   function showSection(index, isForwardNavigation = true) {
     const sections = document.querySelectorAll(".form-section");
+
+    // Hide all sections
+    const duration = 500; // Duration of the fade effect in milliseconds
+
     sections.forEach((section, idx) => {
-      let isSectionVisible = idx === index;
-      section.style.display = isSectionVisible ? "flex" : "none";
+      if (idx !== index) {
+        section.style.opacity = 0;
+        setTimeout(() => {
+          section.style.display = "none";
+        }, duration);
+      }
     });
+
+    // Show the target section with a fade-in effect
+    const targetSection = sections[index];
+    setTimeout(() => {
+      targetSection.style.display = "flex";
+      setTimeout(() => {
+        targetSection.style.opacity = 1;
+      }, 50); // Trigger the fade-in effect after a slight delay
+    }, duration);
 
     updateNavigationState(index);
 
@@ -80,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
       showSection(previousIndex, false); // Navigate back without pushing onto the stack again.
     } else {
       // Handle cases where there's no history (e.g., at the start of the form)
+      showSection(0, false); // Go back to the first section
     }
   }
 
@@ -110,18 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Password validation
     const passwordInput = section.querySelector("#Password");
-    const confirmPasswordInput = section.querySelector("#Password-confirm");
     if (passwordInput && !validatePassword(passwordInput.value)) {
       areFieldsValid = false; // Invalidate if password is not valid
-    }
-
-    // Check if passwords match
-    if (
-      passwordInput &&
-      confirmPasswordInput &&
-      passwordInput.value !== confirmPasswordInput.value
-    ) {
-      areFieldsValid = false; // Invalidate if passwords do not match
     }
 
     // Gender at birth validation
@@ -392,7 +410,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailInput = document.getElementById("Email");
   const initialsInput = document.getElementById("Voorletters");
   const passwordInput = document.getElementById("Password");
-  const confirmPasswordInput = document.getElementById("Password-confirm");
   const birthdayInput = document.getElementById("Geboortedatum");
   const genderInput = document.getElementById("Geslacht");
   const birthdayErrorMessage = document.getElementById(
@@ -461,16 +478,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
-  function validateConfirmPasswordInput() {
-    // Password confirmation validation
-    const passwordsMatch = confirmPasswordInput.value === passwordInput.value;
-    toggleErrorDisplay(
-      confirmPasswordInput,
-      passwordsMatch,
-      document.getElementById("password-confirm-error-message")
-    );
-  }
-
   // jQuery is used here for handling the datepicker event
   $(document).ready(function () {
     $("#Geboortedatum").on("hide.datepicker", function () {
@@ -483,10 +490,6 @@ document.addEventListener("DOMContentLoaded", function () {
   emailInput?.addEventListener("change", validateEmailInput);
   genderInput?.addEventListener("input", validateGenderInput);
   passwordInput?.addEventListener("change", validatePasswordInput);
-  confirmPasswordInput?.addEventListener(
-    "change",
-    validateConfirmPasswordInput
-  );
 
   const voornaamInput = document.getElementById("Voornaam");
   const achternaamInput = document.getElementById("Achternaam");
@@ -547,8 +550,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validatePassword(password) {
-    const re =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,21}$/;
     return re.test(password);
   }
 
