@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(() => {
         targetSection.style.opacity = 1;
       }, 50); // Trigger the fade-in effect after a slight delay
+      setTimeout(updateProgressBar, 100); // Ensure the progress bar updates after the section is visible
     }, duration);
 
     updateNavigationState(index);
@@ -66,8 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!sections[index].classList.contains("disqualification")) {
       lastSectionIndex = index; // Update lastSectionIndex if not going to disqualification section
     }
-
-    updateProgressBar(); // Ensure the progress bar is updated every time a section is shown
   }
 
   function nextSection(currentIndex) {
