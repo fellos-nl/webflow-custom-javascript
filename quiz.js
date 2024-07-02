@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sections = document.querySelectorAll(".form-section");
 
     // Hide all sections
-    const duration = 500; // Duration of the fade effect in milliseconds
+    const duration = 250; // Duration of the fade effect in milliseconds
 
     sections.forEach((section, idx) => {
       if (idx !== index) {
