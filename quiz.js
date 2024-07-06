@@ -281,7 +281,18 @@ document.addEventListener("DOMContentLoaded", function () {
     inputs.forEach((input) => {
       if (!input.checkValidity()) {
         const errorMessageElement = input.nextElementSibling; // Assuming error messages are right after inputs in HTML
-        errorMessageElement.classList.remove("hide-error-message"); // Show error message
+
+        // Handle specific case for checkboxes with custom structure
+        if (input.type === "checkbox") {
+          errorMessageElement = document.getElementById(
+            `${input.id}-error-message`
+          );
+        }
+
+        if (errorMessageElement) {
+          errorMessageElement.classList.remove("hide-error-message"); // Show error message
+        }
+
         input.classList.add("error"); // Add error class to highlight
       }
     });
