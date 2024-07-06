@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (areRequiredFieldsFilled(formSections[currentIndex])) {
       showSection(nextIndex, true);
     } else {
-      console.log("Please fill in all required fields before proceeding.");
+      console.log("Vul alle verplichte velden in om door te gaan.");
     }
   }
 
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     inputs.forEach((input) => {
       if (!input.checkValidity()) {
-        const errorMessageElement = input.nextElementSibling; // Assuming error messages are right after inputs in HTML
+        let errorMessageElement = input.nextElementSibling; // Assuming error messages are right after inputs in HTML
 
         // Handle specific case for checkboxes with custom structure
         if (input.type === "checkbox") {
@@ -302,10 +302,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (firstError) {
       firstError.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-
-    alert(
-      "Vul alle verplichte velden in en corrigeer eventuele fouten voordat je verder gaat."
-    ); // Provide an error message, or make this more specific if desired
   }
 
   document.querySelectorAll(".prev-button").forEach((button) => {
@@ -342,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       inputs.forEach((input) => {
         if (!input.checkValidity()) {
-          const errorMessageElement = input.nextElementSibling; // assuming error messages are right after inputs in HTML
+          let errorMessageElement = input.nextElementSibling; // assuming error messages are right after inputs in HTML
 
           // Handle specific case for checkboxes with custom structure
           if (input.type === "checkbox") {
@@ -364,10 +360,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (firstError) {
       firstError.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-
-    alert(
-      "Vul alle verplichte velden in en corrigeer eventuele fouten voordat je verder gaat."
-    ); // Provide a generic error message, or make this more specific if desired
   }
 
   // Progress bar
